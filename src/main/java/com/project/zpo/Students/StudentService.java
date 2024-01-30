@@ -18,10 +18,12 @@ import static com.project.zpo.Students.Utils.StudentMessages.*;
 @Service
 @Transactional
 public class StudentService {
-
-    @Autowired
     private static StudentRepository studentRepository;
 
+    @Autowired
+    public StudentService(StudentRepository studentRepository) {
+        StudentService.studentRepository = studentRepository;
+    }
 
     public static boolean doesStudentExists(Long album) {
         return studentRepository.findById(album).isPresent();
@@ -32,7 +34,6 @@ public class StudentService {
         student.setFirstName(addStudentRequest.getFirstName());
         student.setLastName(addStudentRequest.getLastName());
     }
-
 
 
     public ResponseEntity<String> addStudent(AddStudentRequest addStudentRequest) {
