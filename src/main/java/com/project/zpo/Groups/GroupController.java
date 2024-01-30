@@ -13,8 +13,8 @@ public class GroupController {
         this.groupService = groupService;
     }
 
-    @PostMapping(path = "add")
-    public void addGroup(@RequestBody String name) {
+    @PostMapping(path = "add/{name}")
+    public void addGroup(@PathVariable("name") String name) {
         groupService.addGroup(name);
     }
 
