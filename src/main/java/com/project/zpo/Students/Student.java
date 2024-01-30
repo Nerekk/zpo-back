@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Entity
 @Table
@@ -27,8 +28,8 @@ public class Student implements Serializable {
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
     private Group studentGroup;
-    @OneToOne(mappedBy = "student", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
-    private Attendance attendance;
+    private List<Attendance> attendances;
 
 }
