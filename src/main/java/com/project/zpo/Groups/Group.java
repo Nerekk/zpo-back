@@ -1,5 +1,6 @@
 package com.project.zpo.Groups;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.zpo.Students.Student;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -24,6 +25,15 @@ public class Group implements Serializable {
     @Column(unique = true)
     private String name;
     @OneToMany(targetEntity = Student.class, mappedBy = "studentGroup")
+    @JsonIgnore
     private List<Student> students;
 
+    @Override
+    public String toString() {
+        return "Group{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", students=" + students +
+                '}';
+    }
 }

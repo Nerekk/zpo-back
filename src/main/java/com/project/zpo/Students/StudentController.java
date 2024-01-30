@@ -12,12 +12,12 @@ public class StudentController {
     @Autowired
     private StudentService studentService;
 
-    @PostMapping("add")
+    @PostMapping()
     public ResponseEntity<String> addStudent(@RequestBody AddStudentRequest addStudentRequest) {
         return studentService.addStudent(addStudentRequest);
     }
 
-    @PostMapping("remove/{album}")
+    @PostMapping("{album}")
     public ResponseEntity<String> removeStudent(@PathVariable("album") Long albumToRemove) {
         return studentService.removeStudent(albumToRemove);
     }

@@ -32,4 +32,14 @@ public class Student implements Serializable {
     @PrimaryKeyJoinColumn
     private List<Attendance> attendances;
 
+    @Override
+    public String toString() {
+        return "Student{" +
+                "album=" + album +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", studentGroup=" + studentGroup +
+                ", attendances=" + attendances +
+                '}';
+    }
 }

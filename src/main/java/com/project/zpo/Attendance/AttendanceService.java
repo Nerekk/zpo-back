@@ -12,4 +12,6 @@ public class AttendanceService {
     public AttendanceService(AttendanceRepository attendanceRepository) {
         this.attendanceRepository = attendanceRepository;
     }
+
+
 }
