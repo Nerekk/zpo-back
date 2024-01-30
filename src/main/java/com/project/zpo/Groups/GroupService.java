@@ -7,15 +7,15 @@ import java.util.Optional;
 
 @Service
 public class GroupService {
-    private final GroupRepository groupRepository;
+    private static GroupRepository groupRepository;
 
     @Autowired
     public GroupService(GroupRepository groupRepository) {
-        this.groupRepository = groupRepository;
+        GroupService.groupRepository = groupRepository;
     }
 
     public void addGroup(String name) {
-        if (name!=null) {
+        if (name != null) {
             Group group = new Group();
             group.setName(name);
             groupRepository.save(group);
@@ -29,7 +29,7 @@ public class GroupService {
         }
     }
 
-    public Optional<Group> getGroup(Long id) {
+    public static Optional<Group> getGroup(Long id) {
         return groupRepository.findById(id);
     }
 }
