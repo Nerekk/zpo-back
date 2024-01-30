@@ -18,8 +18,8 @@ import java.io.Serializable;
 @Setter
 @IdClass(AttendanceId.class)
 public class Attendance implements Serializable {
-    @OneToOne
-    @MapsId
+    @Id
+    @ManyToOne
     @JoinColumn(name = "album", referencedColumnName = "album")
     private Student student;
     @Id
