@@ -1,9 +1,9 @@
-package com.project.zpo;
+package com.project.zpo.Students;
 
 import com.project.zpo.Groups.Group;
+import com.project.zpo.Groups.GroupRepository;
+import com.project.zpo.Groups.GroupService;
 import com.project.zpo.Students.Requests.AddStudentRequest;
-import com.project.zpo.Students.Student;
-import com.project.zpo.Students.StudentRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,32 +20,40 @@ import static com.project.zpo.Students.Utils.StudentMessages.*;
 public class StudentService {
 
     @Autowired
-    public StudentRepository studentRepository;
+    private static StudentRepository studentRepository;
+
+
+    public static boolean doesStudentExists(Long album) {
+        return studentRepository.findById(album).isPresent();
+    }
+
+
+    private void fillName(Student student, AddStudentRequest addStudentRequest) {
+        student.setFirstName(addStudentRequest.getFirstName());
+        student.setLastName(addStudentRequest.getLastName());
+    }
+
 
 
     public ResponseEntity<String> addStudent(AddStudentRequest addStudentRequest) {
 
         Student student = new Student();
-        student.setFirstName(addStudentRequest.getFirstName());
-        student.setLastName(addStudentRequest.getLastName());
+        fillName(student, addStudentRequest);
 
-        Group group = new Group();
-        group.setId(addStudentRequest.getGroup_id());
+        Optional<Group> group = GroupService.getGroup(addStudentRequest.getGroupId());
+        if (group.isEmpty())
+            return new ResponseEntity<>(STUDENT_GROUP_NOT_FOUND_MESSAGE, HttpStatus.OK);
 
-//         todo: group searching
-//        student.setStudentGroup();
-//        return new ResponseEntity<>(STUDENT_INSERTION_ERROR_MESSAGE, HttpStatus.OK);
+        student.setStudentGroup(group.get());
 
         studentRepository.save(student);
-
 
         return new ResponseEntity<>(STUDENT_INSERTED_MESSAGE, HttpStatus.OK);
     }
 
     public ResponseEntity<String> removeStudent(Long albumToRemove) {
-        Optional<Student> student = studentRepository.findById(albumToRemove);
 
-        if (student.isEmpty())
+        if (!doesStudentExists(albumToRemove))
             return new ResponseEntity<>(STUDENT_NOT_FOUND_MESSAGE, HttpStatus.NOT_FOUND);
 
         studentRepository.deleteById(albumToRemove);

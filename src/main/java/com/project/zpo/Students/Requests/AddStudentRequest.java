@@ -12,6 +12,6 @@ public class AddStudentRequest {
 
     private String firstName;
     private String lastName;
-    private Long group_id;
+    private Long groupId;
 
 }
