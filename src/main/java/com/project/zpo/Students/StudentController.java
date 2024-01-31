@@ -9,8 +9,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "students")
 public class StudentController {
 
+    private final StudentService studentService;
+
     @Autowired
-    private StudentService studentService;
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
+
 
     @PostMapping()
     public ResponseEntity<String> addStudent(@RequestBody AddStudentRequest addStudentRequest) {
