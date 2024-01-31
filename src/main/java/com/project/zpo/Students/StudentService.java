@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.project.zpo.Groups.Utils.GroupMessages.GROUP_NOT_FOUND_MESSAGE;
 import static com.project.zpo.Students.Utils.StudentMessages.*;
 
 
@@ -46,7 +47,7 @@ public class StudentService {
 
         Optional<Group> group = GroupService.getGroup(addStudentRequest.getGroupId());
         if (group.isEmpty())
-            return new ResponseEntity<>(STUDENT_GROUP_NOT_FOUND_MESSAGE, HttpStatus.OK);
+            return new ResponseEntity<>(GROUP_NOT_FOUND_MESSAGE, HttpStatus.OK);
 
         student.setStudentGroup(group.get());
 
