@@ -1,19 +1,24 @@
 package com.project.zpo.Attendance;
 
-import com.project.zpo.Attendance.Requests.SetAttendanceRequest;
+import com.project.zpo.Attendance.Requests.AttendanceRequest;
+import com.project.zpo.Attendance.Requests.StudentAttendanceData;
 import com.project.zpo.Students.Student;
 import com.project.zpo.Students.StudentService;
 import com.project.zpo.Term.Term;
+import com.project.zpo.Term.TermService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static com.project.zpo.Attendance.Utils.AttendanceMessages.ATTENDANCE_DATA_CORRUPTED;
 import static com.project.zpo.Attendance.Utils.AttendanceMessages.ATTENDANCE_OK;
 import static com.project.zpo.Students.Utils.StudentMessages.STUDENT_NOT_FOUND_MESSAGE;
+import static com.project.zpo.Term.Utils.TermMessages.TERM_ERROR;
 
 @Service
 public class AttendanceService {
@@ -25,34 +30,54 @@ public class AttendanceService {
     }
 
 
-    public ResponseEntity<String> setAttendance(SetAttendanceRequest setAttendanceRequest) {
+    private Term getOrCreateTerm(LocalDate date) {
+        Term term = TermService.getTerm(date);
+        if (term != null)
+            return term;
 
-        if (setAttendanceRequest == null ||
-                setAttendanceRequest.getDate() == null ||
-                setAttendanceRequest.getStudentAlbum() == null ||
-                setAttendanceRequest.getAttendanceStatus() == null
-        )
-            return new ResponseEntity<>(ATTENDANCE_DATA_CORRUPTED, HttpStatus.BAD_REQUEST);
+        boolean status = TermService.addTerm(date);
+        if (!status)
+            return null;
 
-        Optional<Student> studentOptional = StudentService.getStudent(setAttendanceRequest.getStudentAlbum());
-        if (studentOptional.isEmpty())
-            return new ResponseEntity<>(STUDENT_NOT_FOUND_MESSAGE, HttpStatus.NOT_FOUND);
+        term = TermService.getTerm(date);
 
-        Student student = studentOptional.get();
+        return term;
+    }
 
-        Term term =
+    private Student getStudent(Long album) {
+        Optional<Student> studentOptional = StudentService.getStudent(album);
+        return studentOptional.orElse(null);
+    }
 
-        Term term = new Term();
-        term.setDate(setAttendanceRequest.getDate());
 
-        // todo: get term
+    public ResponseEntity<String> setAttendance(AttendanceRequest request) {
 
-        Attendance attendance = new Attendance(student, term, setAttendanceRequest.getAttendanceStatus().toString());
+        Term term = getOrCreateTerm(request.getDate());
+        if (term == null)
+            return new ResponseEntity<>(TERM_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
 
-        attendanceRepository.save(attendance);
+
+        List<StudentAttendanceData> attendanceData = request.getAttendanceData();
+
+
+        for (StudentAttendanceData data : attendanceData) {
+            if (data.getStudentAlbum() == null || data.getAttendanceStatus() == null)
+                return new ResponseEntity<>(ATTENDANCE_DATA_CORRUPTED, HttpStatus.BAD_REQUEST);
+        }
+
+
+        for (StudentAttendanceData data : attendanceData) {
+
+            Student student = getStudent(data.getStudentAlbum());
+            if (student == null)
+                return new ResponseEntity<>(STUDENT_NOT_FOUND_MESSAGE, HttpStatus.NOT_FOUND);
+
+            Attendance attendance = new Attendance(student, term, data.getAttendanceStatus().toString());
+            attendanceRepository.save(attendance);
+
+        }
 
         return new ResponseEntity<>(ATTENDANCE_OK, HttpStatus.OK);
     }
-
 
 }
