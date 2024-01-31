@@ -47,7 +47,7 @@ public class StudentService {
 
         Optional<Group> group = GroupService.getGroup(addStudentRequest.getGroupId());
         if (group.isEmpty())
-            return new ResponseEntity<>(GROUP_NOT_FOUND_MESSAGE, HttpStatus.OK);
+            return new ResponseEntity<>(GROUP_NOT_FOUND_MESSAGE, HttpStatus.NOT_FOUND);
 
         student.setStudentGroup(group.get());
 

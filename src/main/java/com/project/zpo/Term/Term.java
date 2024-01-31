@@ -1,5 +1,6 @@
 package com.project.zpo.Term;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.zpo.Attendance.Attendance;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -25,5 +26,6 @@ public class Term implements Serializable {
     @Column(nullable = false)
     private LocalDate date;
     @OneToMany(mappedBy = "term")
+    @JsonIgnore
     private List<Attendance> attendances;
 }
