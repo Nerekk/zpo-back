@@ -23,8 +23,10 @@ public class Term implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(nullable = false)
     private LocalDate date;
+
     @OneToMany(mappedBy = "term")
     @JsonIgnore
     private List<Attendance> attendances;
