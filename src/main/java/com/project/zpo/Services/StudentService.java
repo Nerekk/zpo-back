@@ -1,7 +1,7 @@
 package com.project.zpo.Services;
 
 import com.project.zpo.Tables.Group;
-import com.project.zpo.Requests.AddStudentRequest;
+import com.project.zpo.RequestsAndResponses.AddStudentRequest;
 import com.project.zpo.Tables.Student;
 import com.project.zpo.Repositories.StudentRepository;
 import jakarta.transaction.Transactional;

@@ -1,4 +1,4 @@
-package com.project.zpo.Requests;
+package com.project.zpo.RequestsAndResponses;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

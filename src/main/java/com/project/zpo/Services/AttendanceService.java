@@ -1,9 +1,10 @@
 package com.project.zpo.Services;
 
+import com.project.zpo.Enumerations.AttendanceStatus;
+import com.project.zpo.RequestsAndResponses.*;
 import com.project.zpo.Tables.Attendance;
 import com.project.zpo.Repositories.AttendanceRepository;
-import com.project.zpo.Requests.AttendanceRequest;
-import com.project.zpo.Requests.StudentAttendanceData;
+import com.project.zpo.Tables.Group;
 import com.project.zpo.Tables.Student;
 import com.project.zpo.Tables.Term;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -78,6 +80,43 @@ public class AttendanceService {
         }
 
         return new ResponseEntity<>(ATTENDANCE_OK, HttpStatus.OK);
+    }
+
+    public ResponseEntity<GroupAttendanceResponse> getGroupAttendanceData(WholeGroupAttendanceRequest request) {
+
+        LocalDate date = request.getDate();
+        Long groupId = request.getGroupId();
+
+        Optional<Group> groupOpt = GroupService.getGroup(groupId);
+        if (groupOpt.isEmpty())
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        Group group = groupOpt.get();
+
+        Term term = TermService.getTerm(date);
+        if (term == null)
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+        List<StudentResponse> studentResponseList = new ArrayList<>(group.getStudents().size());
+
+        for (Student student : group.getStudents()) {
+            StudentResponse studentResponse = new StudentResponse();
+
+            studentResponse.setAlbum(student.getAlbum());
+            studentResponse.setFirstName(student.getFirstName());
+            studentResponse.setLastName(student.getLastName());
+
+            Attendance attendance = attendanceRepository.findByTerm(term, student);
+            if (attendance == null)
+                studentResponse.setAttendanceStatus(AttendanceStatus.NOT_SET);
+            else
+                studentResponse.setAttendanceStatus(AttendanceStatus.valueOf(attendance.getStatus()));
+
+            studentResponseList.add(studentResponse);
+        }
+
+        GroupAttendanceResponse response = new GroupAttendanceResponse(studentResponseList);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 }

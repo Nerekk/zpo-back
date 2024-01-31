@@ -1,6 +1,6 @@
 package com.project.zpo.Controllers;
 
-import com.project.zpo.Requests.AddStudentRequest;
+import com.project.zpo.RequestsAndResponses.AddStudentRequest;
 import com.project.zpo.Services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
