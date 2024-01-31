@@ -1,7 +1,6 @@
 package com.project.zpo.Tables;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.project.zpo.Tables.Student;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

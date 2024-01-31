@@ -1,8 +1,8 @@
 package com.project.zpo.Services;
 
-import com.project.zpo.Tables.Group;
 import com.project.zpo.Repositories.GroupRepository;
 import com.project.zpo.Requests.GroupRequest;
+import com.project.zpo.Tables.Group;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,12 +39,11 @@ public class GroupService {
 
     public GroupRequest getGroupRequest(Long id) {
         Group group = groupRepository.findById(id).orElse(null);
-        if (group != null) {
-            GroupRequest groupRequest = new GroupRequest(group.getId(), group.getName(), group.getStudents());
-            return groupRequest;
-        } else {
-            return null;
-        }
+
+        if (group != null)
+            return new GroupRequest(group.getId(), group.getName(), group.getStudents());
+
+        return null;
     }
 
     public List<GroupRequest> getAllGroups() {
