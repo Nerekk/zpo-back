@@ -28,6 +28,10 @@ public class StudentService {
         return studentRepository.findById(album).isPresent();
     }
 
+    public static Optional<Student> getStudent(Long album) {
+        return studentRepository.findById(album);
+    }
+
 
     private void fillName(Student student, AddStudentRequest addStudentRequest) {
         student.setFirstName(addStudentRequest.getFirstName());
