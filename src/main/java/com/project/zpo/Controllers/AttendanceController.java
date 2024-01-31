@@ -1,13 +1,12 @@
 package com.project.zpo.Controllers;
 
+import com.project.zpo.RequestsAndResponses.GroupAttendanceResponse;
+import com.project.zpo.RequestsAndResponses.WholeGroupAttendanceRequest;
 import com.project.zpo.Services.AttendanceService;
-import com.project.zpo.Requests.AttendanceRequest;
+import com.project.zpo.RequestsAndResponses.AttendanceRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "attendances")
@@ -22,6 +21,11 @@ public class AttendanceController {
     @PutMapping("")
     public ResponseEntity<String> setGroupOfStudentsAttendances(@RequestBody AttendanceRequest request) {
         return attendanceService.setAttendance(request);
+    }
+
+    @GetMapping("group")
+    public ResponseEntity<GroupAttendanceResponse> getGroupAttendanceData(@RequestBody WholeGroupAttendanceRequest attendanceRequest) {
+        return attendanceService.getGroupAttendanceData(attendanceRequest);
     }
 
 }
