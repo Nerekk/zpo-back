@@ -1,7 +1,7 @@
 package com.project.zpo.Services;
 
 import com.project.zpo.Repositories.GroupRepository;
-import com.project.zpo.Requests.GroupRequest;
+import com.project.zpo.RequestsAndResponses.GroupResponse;
 import com.project.zpo.Tables.Group;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,22 +37,22 @@ public class GroupService {
         return groupRepository.findById(id);
     }
 
-    public GroupRequest getGroupRequest(Long id) {
+    public GroupResponse getGroupRequest(Long id) {
         Group group = groupRepository.findById(id).orElse(null);
 
         if (group != null)
-            return new GroupRequest(group.getId(), group.getName(), group.getStudents());
+            return new GroupResponse(group.getId(), group.getName()/*, group.getStudents()*/);
 
         return null;
     }
 
-    public List<GroupRequest> getAllGroups() {
-        List<GroupRequest> groupRequests = new ArrayList<>();
+    public List<GroupResponse> getAllGroups() {
+        List<GroupResponse> groupResponses = new ArrayList<>();
         List<Group> groups = groupRepository.findAll();
 
         for (Group group : groups)
-            groupRequests.add(getGroupRequest(group.getId()));
+            groupResponses.add(getGroupRequest(group.getId()));
 
-        return groupRequests;
+        return groupResponses;
     }
 }

@@ -1,8 +1,11 @@
 package com.project.zpo.Controllers;
 
 import com.project.zpo.Services.GroupService;
-import com.project.zpo.Requests.GroupRequest;
+import com.project.zpo.RequestsAndResponses.GroupResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,12 +31,18 @@ public class GroupController {
     }
 
     @GetMapping(path = "{id}")
-    public GroupRequest getGroupRequest(@PathVariable("id") Long id) {
-        return groupService.getGroupRequest(id);
+    public ResponseEntity<GroupResponse> getGroupRequest(@PathVariable("id") Long id) {
+
+        GroupResponse response = groupService.getGroupRequest(id);
+        if (response == null)
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping(path = "all")
-    public List<GroupRequest> getAllGroups() {
+    public List<GroupResponse> getAllGroups() {
         return groupService.getAllGroups();
     }
+
 }
