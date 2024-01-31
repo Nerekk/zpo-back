@@ -26,9 +26,8 @@ public class GroupService {
     }
 
     public void deleteGroup(Long id) {
-        Group group = getGroup(id).orElse(null);
-        if (group != null) {
-            groupRepository.delete(group);
+        if (id != null) {
+            groupRepository.deleteById(id);
         }
     }
 

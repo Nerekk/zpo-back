@@ -1,5 +1,6 @@
 package com.project.zpo.Students;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.zpo.Attendance.Attendance;
 import com.project.zpo.Groups.Group;
 import jakarta.persistence.*;
@@ -30,6 +31,7 @@ public class Student implements Serializable {
     private Group studentGroup;
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
+    @JsonIgnore
     private List<Attendance> attendances;
 
     @Override
