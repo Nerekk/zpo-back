@@ -18,14 +18,17 @@ import java.io.Serializable;
 @Setter
 @IdClass(AttendanceId.class)
 public class Attendance implements Serializable {
+
     @Id
     @ManyToOne
     @JoinColumn(name = "album", referencedColumnName = "album")
     private Student student;
+
     @Id
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "term_id", referencedColumnName = "id")
     private Term term;
+
     @Column(nullable = false)
     private String status;
 

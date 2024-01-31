@@ -1,7 +1,6 @@
 package com.project.zpo.Students;
 
 import com.project.zpo.Groups.Group;
-import com.project.zpo.Groups.GroupRepository;
 import com.project.zpo.Groups.GroupService;
 import com.project.zpo.Students.Requests.AddStudentRequest;
 import jakarta.transaction.Transactional;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+import static com.project.zpo.Groups.Utils.GroupMessages.GROUP_NOT_FOUND_MESSAGE;
 import static com.project.zpo.Students.Utils.StudentMessages.*;
 
 
@@ -29,6 +29,10 @@ public class StudentService {
         return studentRepository.findById(album).isPresent();
     }
 
+    public static Optional<Student> getStudent(Long album) {
+        return studentRepository.findById(album);
+    }
+
 
     private void fillName(Student student, AddStudentRequest addStudentRequest) {
         student.setFirstName(addStudentRequest.getFirstName());
@@ -43,7 +47,7 @@ public class StudentService {
 
         Optional<Group> group = GroupService.getGroup(addStudentRequest.getGroupId());
         if (group.isEmpty())
-            return new ResponseEntity<>(STUDENT_GROUP_NOT_FOUND_MESSAGE, HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(GROUP_NOT_FOUND_MESSAGE, HttpStatus.NOT_FOUND);
 
         student.setStudentGroup(group.get());
 
