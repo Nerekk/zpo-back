@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class TermService {
@@ -14,19 +15,31 @@ public class TermService {
         TermService.termRepository = termRepository;
     }
 
-    public void addTerm(LocalDate localDate) {
-        if (localDate != null) {
-            Term term = new Term();
-            term.setDate(localDate);
+    public boolean addTerm(LocalDate localDate) {
 
-            termRepository.save(term);
-        }
+        if (localDate == null)
+            return false;
+
+        Term term = new Term();
+        term.setDate(localDate);
+
+        termRepository.save(term);
+
+        return true;
     }
 
-    public void deleteTerm(Long id) {
-        if (id != null) {
-            termRepository.deleteById(id);
-        }
+    public boolean deleteTerm(Long id) {
+
+        if (id == null)
+            return false;
+
+        Optional<Term> term = termRepository.findById(id);
+        if (term.isEmpty())
+            return false;
+
+        termRepository.deleteById(id);
+
+        return true;
     }
 
     public Term getTerm(Long id) {
