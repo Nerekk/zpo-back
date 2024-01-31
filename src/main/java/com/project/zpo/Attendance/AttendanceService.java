@@ -40,6 +40,8 @@ public class AttendanceService {
 
         Student student = studentOptional.get();
 
+        Term term =
+
         Term term = new Term();
         term.setDate(setAttendanceRequest.getDate());
 

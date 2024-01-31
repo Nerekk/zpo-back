@@ -15,7 +15,7 @@ public class TermService {
         TermService.termRepository = termRepository;
     }
 
-    public boolean addTerm(LocalDate localDate) {
+    public static boolean addTerm(LocalDate localDate) {
 
         if (localDate == null)
             return false;
@@ -28,7 +28,7 @@ public class TermService {
         return true;
     }
 
-    public boolean deleteTerm(Long id) {
+    public static boolean deleteTerm(Long id) {
 
         if (id == null)
             return false;
@@ -42,11 +42,11 @@ public class TermService {
         return true;
     }
 
-    public Term getTerm(Long id) {
+    public static Term getTerm(Long id) {
         return termRepository.findById(id).orElse(null);
     }
 
-    public Term getTerm(LocalDate localDate) {
+    public static Term getTerm(LocalDate localDate) {
         return termRepository.findByDate(localDate);
     }
 }
