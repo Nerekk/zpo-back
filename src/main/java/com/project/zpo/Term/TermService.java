@@ -29,4 +29,11 @@ public class TermService {
         }
     }
 
+    public Term getTerm(Long id) {
+        return termRepository.findById(id).orElse(null);
+    }
+
+    public Term getTerm(LocalDate localDate) {
+        return termRepository.findByDate(localDate);
+    }
 }
