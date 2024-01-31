@@ -20,17 +20,17 @@ public class GroupService {
     }
 
     public void addGroup(String name) {
-        if (name != null) {
-            Group group = new Group();
-            group.setName(name);
-            groupRepository.save(group);
-        }
+        if (name == null)
+            return;
+
+        Group group = new Group();
+        group.setName(name);
+        groupRepository.save(group);
     }
 
     public void deleteGroup(Long id) {
-        if (id != null) {
+        if (id != null)
             groupRepository.deleteById(id);
-        }
     }
 
     public static Optional<Group> getGroup(Long id) {
@@ -50,9 +50,9 @@ public class GroupService {
         List<GroupRequest> groupRequests = new ArrayList<>();
         List<Group> groups = groupRepository.findAll();
 
-        for (Group group : groups) {
+        for (Group group : groups)
             groupRequests.add(getGroupRequest(group.getId()));
-        }
+
         return groupRequests;
     }
 }
