@@ -24,7 +24,7 @@ public class StudentController {
         return studentService.addStudent(addStudentRequest);
     }
 
-    @PostMapping("{album}")
+    @DeleteMapping("{album}")
     public ResponseEntity<String> removeStudent(@PathVariable("album") Long albumToRemove) {
         return studentService.removeStudent(albumToRemove);
     }
