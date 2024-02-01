@@ -40,9 +40,22 @@ public class GroupService {
         return new ResponseEntity<>(GROUP_OK_MESSAGE, HttpStatus.OK);
     }
 
-    public void deleteGroup(Long id) {
-        if (id != null)
-            groupRepository.deleteById(id);
+    public ResponseEntity<String> deleteGroup(Long id) {
+        if (id == null)
+            return new ResponseEntity<>(GROUP_WRONG_DATA_MESSAGE, HttpStatus.BAD_REQUEST);
+
+        Optional<Group> groupOpt = groupRepository.findById(id);
+        if (groupOpt.isEmpty())
+            return new ResponseEntity<>(GROUP_NOT_FOUND_MESSAGE, HttpStatus.NOT_FOUND);
+
+        Group group = groupOpt.get();
+
+        if (!group.getStudents().isEmpty())
+            return new ResponseEntity<>(GROUP_NOT_EMPTY_MESSAGE, HttpStatus.CONFLICT);
+
+        groupRepository.delete(group);
+
+        return new ResponseEntity<>(GROUP_OK_MESSAGE, HttpStatus.OK);
     }
 
     public static Optional<Group> getGroup(Long id) {

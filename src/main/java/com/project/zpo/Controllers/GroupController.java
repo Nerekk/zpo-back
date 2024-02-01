@@ -26,8 +26,8 @@ public class GroupController {
     }
 
     @DeleteMapping(path = "{id}")
-    public void deleteGroup(@PathVariable("id") Long id) {
-        groupService.deleteGroup(id);
+    public ResponseEntity<String> deleteGroup(@PathVariable("id") Long id) {
+        return groupService.deleteGroup(id);
     }
 
     @GetMapping(path = "{id}")
