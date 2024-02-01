@@ -1,6 +1,7 @@
 package com.project.zpo.Controllers;
 
 import com.project.zpo.RequestsAndResponses.AddStudentRequest;
+import com.project.zpo.RequestsAndResponses.GroupChangeRequest;
 import com.project.zpo.Services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -28,5 +29,11 @@ public class StudentController {
     public ResponseEntity<String> removeStudent(@PathVariable("album") Long albumToRemove) {
         return studentService.removeStudent(albumToRemove);
     }
+
+    @PutMapping("group/change")
+    public ResponseEntity<String> changeStudentGroup(@RequestBody GroupChangeRequest changeRequest) {
+        return studentService.changeGroup(changeRequest);
+    }
+
 
 }
