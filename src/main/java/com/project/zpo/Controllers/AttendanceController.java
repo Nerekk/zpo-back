@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "attendances")
+@CrossOrigin
 public class AttendanceController {
     private final AttendanceService attendanceService;
 

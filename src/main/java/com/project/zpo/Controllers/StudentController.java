@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "students")
+@CrossOrigin
 public class StudentController {
 
     private final StudentService studentService;
