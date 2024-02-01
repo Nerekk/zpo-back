@@ -20,18 +20,12 @@ public class Group implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(unique = true)
     private String name;
+
     @OneToMany(targetEntity = Student.class, mappedBy = "studentGroup")
     @JsonIgnore
     private List<Student> students;
 
-    @Override
-    public String toString() {
-        return "Group{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", students=" + students +
-                '}';
-    }
 }
