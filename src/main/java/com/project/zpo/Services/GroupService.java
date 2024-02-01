@@ -62,18 +62,20 @@ public class GroupService {
         return groupRepository.findById(id);
     }
 
-    public GroupResponse getGroupRequest(Long id) {
+    public ResponseEntity<GroupResponse> getGroupRequest(Long id) {
         Group group = groupRepository.findById(id).orElse(null);
 
         if (group == null)
-            return null;
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
         List<BasicStudentResponse> basicStudentResponseList = new ArrayList<>(group.getStudents().size());
 
         for (Student student : group.getStudents())
             basicStudentResponseList.add(new BasicStudentResponse(student.getAlbum(), student.getFirstName(), student.getLastName()));
 
-        return new GroupResponse(group.getId(), group.getName(), basicStudentResponseList);
+        GroupResponse response = new GroupResponse(group.getId(), group.getName(), basicStudentResponseList);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     public List<GroupResponse> getAllGroups() {
@@ -81,7 +83,7 @@ public class GroupService {
         List<Group> groups = groupRepository.findAll();
 
         for (Group group : groups)
-            groupResponses.add(getGroupRequest(group.getId()));
+            groupResponses.add(getGroupRequest(group.getId()).getBody());
 
         return groupResponses;
     }
