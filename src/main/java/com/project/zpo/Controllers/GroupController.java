@@ -22,8 +22,8 @@ public class GroupController {
     }
 
     @PostMapping(path = "{name}")
-    public void addGroup(@PathVariable("name") String name) {
-        groupService.addGroup(name);
+    public ResponseEntity<String> addGroup(@PathVariable("name") String name) {
+        return groupService.addGroup(name);
     }
 
     @DeleteMapping(path = "{id}")

@@ -6,11 +6,15 @@ import com.project.zpo.RequestsAndResponses.GroupResponse;
 import com.project.zpo.Tables.Group;
 import com.project.zpo.Tables.Student;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.project.zpo.Messages.GroupMessages.*;
 
 @Service
 public class GroupService {
@@ -21,13 +25,19 @@ public class GroupService {
         GroupService.groupRepository = groupRepository;
     }
 
-    public void addGroup(String name) {
+    public ResponseEntity<String> addGroup(String name) {
         if (name == null)
-            return;
+            return new ResponseEntity<>(GROUP_WRONG_DATA_MESSAGE, HttpStatus.BAD_REQUEST);
+
+        Group existingGroup = groupRepository.findByName(name);
+        if (existingGroup != null)
+            return new ResponseEntity<>(GROUP_NAME_COLLISION_MESSAGE, HttpStatus.CONFLICT);
 
         Group group = new Group();
         group.setName(name);
         groupRepository.save(group);
+
+        return new ResponseEntity<>(GROUP_OK_MESSAGE, HttpStatus.OK);
     }
 
     public void deleteGroup(Long id) {
