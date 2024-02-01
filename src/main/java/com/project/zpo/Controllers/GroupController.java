@@ -26,18 +26,13 @@ public class GroupController {
     }
 
     @DeleteMapping(path = "{id}")
-    public void deleteGroup(@PathVariable("id") Long id) {
-        groupService.deleteGroup(id);
+    public ResponseEntity<String> deleteGroup(@PathVariable("id") Long id) {
+        return groupService.deleteGroup(id);
     }
 
     @GetMapping(path = "{id}")
     public ResponseEntity<GroupResponse> getGroupRequest(@PathVariable("id") Long id) {
-
-        GroupResponse response = groupService.getGroupRequest(id);
-        if (response == null)
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        return groupService.getGroupRequest(id);
     }
 
     @GetMapping(path = "all")

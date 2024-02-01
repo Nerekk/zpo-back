@@ -40,27 +40,42 @@ public class GroupService {
         return new ResponseEntity<>(GROUP_OK_MESSAGE, HttpStatus.OK);
     }
 
-    public void deleteGroup(Long id) {
-        if (id != null)
-            groupRepository.deleteById(id);
+    public ResponseEntity<String> deleteGroup(Long id) {
+        if (id == null)
+            return new ResponseEntity<>(GROUP_WRONG_DATA_MESSAGE, HttpStatus.BAD_REQUEST);
+
+        Optional<Group> groupOpt = groupRepository.findById(id);
+        if (groupOpt.isEmpty())
+            return new ResponseEntity<>(GROUP_NOT_FOUND_MESSAGE, HttpStatus.NOT_FOUND);
+
+        Group group = groupOpt.get();
+
+        if (!group.getStudents().isEmpty())
+            return new ResponseEntity<>(GROUP_NOT_EMPTY_MESSAGE, HttpStatus.CONFLICT);
+
+        groupRepository.delete(group);
+
+        return new ResponseEntity<>(GROUP_OK_MESSAGE, HttpStatus.OK);
     }
 
     public static Optional<Group> getGroup(Long id) {
         return groupRepository.findById(id);
     }
 
-    public GroupResponse getGroupRequest(Long id) {
+    public ResponseEntity<GroupResponse> getGroupRequest(Long id) {
         Group group = groupRepository.findById(id).orElse(null);
 
         if (group == null)
-            return null;
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
         List<BasicStudentResponse> basicStudentResponseList = new ArrayList<>(group.getStudents().size());
 
         for (Student student : group.getStudents())
             basicStudentResponseList.add(new BasicStudentResponse(student.getAlbum(), student.getFirstName(), student.getLastName()));
 
-        return new GroupResponse(group.getId(), group.getName(), basicStudentResponseList);
+        GroupResponse response = new GroupResponse(group.getId(), group.getName(), basicStudentResponseList);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     public List<GroupResponse> getAllGroups() {
@@ -68,7 +83,7 @@ public class GroupService {
         List<Group> groups = groupRepository.findAll();
 
         for (Group group : groups)
-            groupResponses.add(getGroupRequest(group.getId()));
+            groupResponses.add(getGroupRequest(group.getId()).getBody());
 
         return groupResponses;
     }
