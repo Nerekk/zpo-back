@@ -1,5 +1,8 @@
 package com.project.zpo.Messages;
 
+/**
+ * A class containing constant messages related to group handling, utilized in ResponseEntity calls.
+ */
 public class GroupMessages {
 
     public static final String GROUP_NOT_FOUND_MESSAGE = "Group not found!";
