@@ -27,7 +27,7 @@ public class Student implements Serializable {
     @ManyToOne
     @JoinColumn(name = "group_id", nullable = false)
     private Group studentGroup;
-    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "student", cascade = CascadeType.REMOVE)
     @PrimaryKeyJoinColumn
     @JsonIgnore
     private List<Attendance> attendances;
