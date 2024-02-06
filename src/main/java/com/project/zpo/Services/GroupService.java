@@ -16,15 +16,35 @@ import java.util.Optional;
 
 import static com.project.zpo.Messages.GroupMessages.*;
 
+/**
+ * Service class responsible for handling group-related business logic.
+ * It interacts with the database via the {@link GroupRepository} and provides various operations related to groups.
+ */
 @Service
 public class GroupService {
+
+    /**
+     * Repository for managing Group entities in the database.
+     */
     private static GroupRepository groupRepository;
 
+    /**
+     * Automatic constructor for the GroupService class.
+     *
+     * @param groupRepository The GroupRepository instance to be used by the service.
+     */
     @Autowired
     public GroupService(GroupRepository groupRepository) {
         GroupService.groupRepository = groupRepository;
     }
 
+    /**
+     * Method for adding a new group with the specified name.
+     *
+     * @param name The name of the group to be added.
+     * @return ResponseEntity representing the HTTP response indicating the status of the operation.
+     * @see ResponseEntity
+     */
     public ResponseEntity<String> addGroup(String name) {
         if (name == null)
             return new ResponseEntity<>(GROUP_WRONG_DATA_MESSAGE, HttpStatus.BAD_REQUEST);
@@ -40,6 +60,13 @@ public class GroupService {
         return new ResponseEntity<>(GROUP_OK_MESSAGE, HttpStatus.OK);
     }
 
+    /**
+     * Method for deleting an existing group with the specified ID.
+     *
+     * @param id The ID of the group to be deleted.
+     * @return ResponseEntity representing the HTTP response indicating the status of the operation.
+     * @see ResponseEntity
+     */
     public ResponseEntity<String> deleteGroup(Long id) {
         if (id == null)
             return new ResponseEntity<>(GROUP_WRONG_DATA_MESSAGE, HttpStatus.BAD_REQUEST);
@@ -58,10 +85,24 @@ public class GroupService {
         return new ResponseEntity<>(GROUP_OK_MESSAGE, HttpStatus.OK);
     }
 
+    /**
+     * Method for retrieving a group by its ID.
+     *
+     * @param id The ID of the group to be retrieved.
+     * @return Optional containing the Group object if found, or empty if not found.
+     * @see Optional
+     */
     public static Optional<Group> getGroup(Long id) {
         return groupRepository.findById(id);
     }
 
+    /**
+     * Method for retrieving information about a group by its ID.
+     *
+     * @param id The ID of the group to be retrieved.
+     * @return ResponseEntity containing the GroupResponse with information about the group.
+     * @see ResponseEntity
+     */
     public ResponseEntity<GroupResponse> getGroupRequest(Long id) {
         Group group = groupRepository.findById(id).orElse(null);
 
@@ -78,6 +119,11 @@ public class GroupService {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    /**
+     * Method for retrieving information about all groups.
+     *
+     * @return List of GroupResponse objects containing information about all groups.
+     */
     public List<GroupResponse> getAllGroups() {
         List<GroupResponse> groupResponses = new ArrayList<>();
         List<Group> groups = groupRepository.findAll();

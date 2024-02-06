@@ -22,16 +22,35 @@ import static com.project.zpo.Messages.AttendanceMessages.ATTENDANCE_OK;
 import static com.project.zpo.Messages.StudentMessages.STUDENT_NOT_FOUND_MESSAGE;
 import static com.project.zpo.Messages.TermMessages.TERM_ERROR;
 
+/**
+ * Service class responsible for handling attendance-related business logic.
+ * It interacts with the database via the {@link AttendanceRepository} and utilizes other services such as {@link TermService} and {@link StudentService}.
+ */
 @Service
 public class AttendanceService {
+
+    /**
+     * Repository for managing Attendance entities in the database.
+     */
     private final AttendanceRepository attendanceRepository;
 
+    /**
+     * Automatic constructor for the AttendanceService class.
+     *
+     * @param attendanceRepository The AttendanceRepository instance to be used by the service.
+     */
     @Autowired
     public AttendanceService(AttendanceRepository attendanceRepository) {
         this.attendanceRepository = attendanceRepository;
     }
 
 
+    /**
+     * Private method to get or create (if not exists) a term based on the provided date.
+     *
+     * @param date The date for which the term is needed.
+     * @return The Term object representing the term for the given date or null.
+     */
     private Term getOrCreateTerm(LocalDate date) {
         Term term = TermService.getTerm(date);
         if (term != null)
@@ -46,12 +65,25 @@ public class AttendanceService {
         return term;
     }
 
+    /**
+     * Private method to retrieve a student based on the provided album number.
+     *
+     * @param album The album number of the student.
+     * @return The Student object representing the student with the provided album number or null.
+     */
     private Student getStudent(Long album) {
         Optional<Student> studentOptional = StudentService.getStudent(album);
         return studentOptional.orElse(null);
     }
 
 
+    /**
+     * Method for setting attendance based on the provided request.
+     *
+     * @param request The AttendanceRequest containing data for setting attendance.
+     * @return ResponseEntity representing the HTTP response indicating the status of the operation.
+     * @see ResponseEntity
+     */
     public ResponseEntity<String> setAttendance(AttendanceRequest request) {
 
         Term term = getOrCreateTerm(request.getDate());
@@ -82,6 +114,13 @@ public class AttendanceService {
         return new ResponseEntity<>(ATTENDANCE_OK, HttpStatus.OK);
     }
 
+    /**
+     * Method for retrieving attendance data for a group on a specific date.
+     *
+     * @param request The WholeGroupAttendanceRequest containing data for retrieving group attendance.
+     * @return ResponseEntity containing the GroupAttendanceResponse with attendance data for the group.
+     * @see ResponseEntity
+     */
     public ResponseEntity<GroupAttendanceResponse> getGroupAttendanceData(WholeGroupAttendanceRequest request) {
 
         LocalDate date = request.getDate();
