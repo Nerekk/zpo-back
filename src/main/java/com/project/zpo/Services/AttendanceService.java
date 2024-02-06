@@ -132,8 +132,8 @@ public class AttendanceService {
         Group group = groupOpt.get();
 
         Term term = TermService.getTerm(date);
-        if (term == null)
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+//        if (term == null)
+//            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
         List<StudentResponse> studentResponseList = new ArrayList<>(group.getStudents().size());
 
@@ -144,7 +144,11 @@ public class AttendanceService {
             studentResponse.setFirstName(student.getFirstName());
             studentResponse.setLastName(student.getLastName());
 
-            Attendance attendance = attendanceRepository.findByTerm(term, student);
+            Attendance attendance = null;
+
+            if (term != null)
+                attendance = attendanceRepository.findByTerm(term, student);
+
             if (attendance == null)
                 studentResponse.setAttendanceStatus(AttendanceStatus.NOT_SET);
             else

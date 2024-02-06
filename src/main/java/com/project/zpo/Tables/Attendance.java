@@ -50,7 +50,7 @@ public class Attendance implements Serializable {
      * @see Term
      */
     @Id
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "term_id", referencedColumnName = "id")
     private Term term;
 
